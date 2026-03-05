@@ -9,10 +9,12 @@ This repository contains Docker and OpenClaw configuration files for running Ope
 - `Dockerfile` - Docker image definition
 - `openclaw.json` - OpenClaw main configuration file
 - `.env.example` - Environment variables template (copy to `.env` and fill in your values)
+- `cron-jobs-example.json` - Example cron job configurations
 
 ### Installation Scripts
 - `install-ubuntu.sh` - Automated installation script for Ubuntu
 - `DISCORD_SETUP.md` - Complete Discord bot setup guide
+- `test-installation.sh` - Installation verification script
 
 ### Security Notes
 - **Never commit `.env` file** - Contains sensitive API keys and tokens
@@ -218,10 +220,10 @@ docker-compose logs openclaw
 ### Step 8: Configure Automation (Optional)
 
 #### 8.1 Set Up Cron Jobs
-OpenClaw can run automated tasks. Example cron jobs are pre-configured in the system for:
+OpenClaw can run automated tasks. Example cron jobs can be configured for:
 - Daily sci-fi story generation
 - Daily neuroscience updates
-- Daily OpenClaw use cases fetching
+- Other custom automated tasks
 
 #### 8.2 Monitor Automation
 ```bash
@@ -252,6 +254,13 @@ docker-compose exec openclaw openclaw cron run [job-id]
 - Includes: git, curl, python3, scientific libraries
 - Installs OpenClaw globally
 - Runs as non-root `node` user for security
+
+### Cron Jobs Example (`cron-jobs-example.json`)
+- Example configurations for automated tasks
+- Sci-fi story generation schedule
+- Neuroscience updates schedule
+- Customizable for your needs
+- Uses placeholder channel IDs (replace with your own)
 
 ## 🐛 Troubleshooting
 
@@ -572,12 +581,12 @@ docker-compose up -d
 
 ## 📊 Cron Jobs Configuration
 
-The system includes automated cron jobs for:
-1. **Daily Sci-Fi Novel Generation** - 13:00 UTC (7:00 AM local)
-2. **Daily Neuroscience Updates** - 13:30 UTC (7:30 AM local)
-3. **Daily OpenClaw Use Cases** - 12:00 UTC (6:00 AM local)
+The system can be configured with automated cron jobs for tasks such as:
+1. **Daily Sci-Fi Novel Generation** - Customizable schedule
+2. **Daily Neuroscience Updates** - Customizable schedule
+3. **Other automated tasks** - Based on your needs
 
-Cron jobs are configured in `cron/jobs.json` and automatically post to Discord channels.
+Cron jobs can be configured in `cron/jobs.json` to automatically post to Discord channels.
 
 ## 🔄 Updates
 

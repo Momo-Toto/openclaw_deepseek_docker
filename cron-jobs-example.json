@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "example-sci-fi-job",
+      "agentId": "main",
+      "name": "daily-sci-fi-novel",
+      "description": "Generate and post daily Black Mirror-style sci-fi story",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 13 * * *"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "RUN_DAILY_SCI_FI_STORY"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "discord",
+        "to": "channel:YOUR_CHANNEL_ID_HERE"
+      }
+    },
+    {
+      "id": "example-neuroscience-job",
+      "agentId": "main",
+      "name": "daily-neuroscience",
+      "description": "Generate and post daily neuroscience updates",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 13 * * *"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "RUN_DAILY_NEUROSCIENCE_UPDATE"
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "discord",
+        "to": "channel:YOUR_CHANNEL_ID_HERE"
+      }
+    }
+  ]
+}
