@@ -1,15 +1,21 @@
 # OpenClaw DeepSeek Configuration
 
-This repository contains Docker and OpenClaw configuration files for running OpenClaw with DeepSeek AI models.
+This repository contains Docker and OpenClaw configuration files for running OpenClaw with DeepSeek AI models. 
+
+## 🚀 **Model Configuration**
+**Configured with DeepSeek Chat as the default model** for fast, efficient responses. The Reasoner model is also available for enhanced reasoning capabilities when needed.
+
+> **Note**: You can easily switch to DeepSeek Reasoner for complex problem-solving, coding, and analytical tasks using the model switching guide.
 
 ## 📁 Files Included
 
 ### Core Configuration
 - `docker-compose.yml` - Docker Compose configuration for OpenClaw
 - `Dockerfile` - Docker image definition
-- `openclaw.json` - OpenClaw main configuration file
+- `openclaw.json` - OpenClaw main configuration file **(configured with DeepSeek Chat as default, Reasoner available)**
 - `.env.example` - Environment variables template (copy to `.env` and fill in your values)
 - `cron-jobs-example.json` - Example cron job configurations
+- `MODEL_SWITCHING.md` - Guide for switching between DeepSeek Chat and Reasoner models
 
 ### Installation Scripts
 - `install-ubuntu.sh` - Automated installation script for Ubuntu
@@ -247,7 +253,86 @@ docker-compose exec openclaw openclaw cron run [job-id]
 - **Models**: Configured for DeepSeek Chat and DeepSeek Reasoner
 - **Gateway**: Runs on port 18789, binds to LAN
 - **Channels**: Discord integration enabled
-- **Agents**: Default model set to DeepSeek Chat
+- **Agents**: **Default model set to DeepSeek Chat** (fast, efficient responses)
+
+## 🤖 Changing AI Models
+
+The configuration supports both DeepSeek Chat and DeepSeek Reasoner models. Here's how to switch between them:
+
+### Option 1: Change Default Model (Permanent)
+
+Edit `openclaw.json` and change the default model in the agents section:
+
+```json
+"agents": {
+  "defaults": {
+    "model": "deepseek/deepseek-reasoner",  // Change from deepseek-chat to deepseek-reasoner
+    "models": {
+      "deepseek/deepseek-chat": {},
+      "deepseek/deepseek-reasoner": {}
+    },
+    "workspace": "/home/node/.openclaw/workspace"
+  }
+}
+```
+
+**Restart OpenClaw after making this change:**
+```bash
+docker-compose restart
+```
+
+### Option 2: Use Model Switching Commands (Temporary)
+
+You can switch models on-the-fly using OpenClaw commands:
+
+#### In Discord or Web UI:
+- Use `/model deepseek/deepseek-reasoner` to switch to DeepSeek Reasoner (enhanced reasoning for complex tasks)
+- Use `/model deepseek/deepseek-chat` to switch back to DeepSeek Chat (default, faster responses)
+- Use `/status` to see current model
+
+#### Via Docker Exec:
+```bash
+# Switch to DeepSeek Reasoner
+docker-compose exec openclaw openclaw models set deepseek/deepseek-reasoner
+
+# Switch back to DeepSeek Chat
+docker-compose exec openclaw openclaw models set deepseek/deepseek-chat
+
+# Check current model
+docker-compose exec openclaw openclaw models status
+```
+
+### Option 3: Per-Session Model Selection
+
+When spawning sub-agents or ACP sessions, specify the model directly:
+
+```bash
+# Spawn a sub-agent with DeepSeek Reasoner
+docker-compose exec openclaw openclaw sessions spawn \
+  --runtime subagent \
+  --model deepseek/deepseek-reasoner \
+  "Your task here"
+
+# Spawn an ACP coding session with DeepSeek Reasoner
+docker-compose exec openclaw openclaw sessions spawn \
+  --runtime acp \
+  --model deepseek/deepseek-reasoner \
+  "Your coding task here"
+```
+
+### Model Differences
+
+| Model | Reasoning | Context Window | Best For |
+|-------|-----------|----------------|----------|
+| **DeepSeek Chat** | No | 128K tokens | General conversation, quick responses, everyday tasks |
+| **DeepSeek Reasoner** | Yes | 128K tokens | Complex problem-solving, coding, logical reasoning, math |
+
+### Notes:
+1. **DeepSeek Reasoner** uses chain-of-thought reasoning, which can produce more detailed and accurate responses for complex tasks
+2. **DeepSeek Chat** is faster and more cost-effective for simple queries
+3. Both models support the same 128K context window
+4. You can switch between models at any time without restarting (using commands)
+5. The default model in the configuration file determines what model starts when OpenClaw boots
 
 ### Docker Image (`Dockerfile`)
 - Based on Node 24 Bookworm Slim
